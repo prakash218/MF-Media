@@ -1,6 +1,6 @@
 import pygame
 import sys
-import pygame_gui as pgui
+# import pygame_gui as pgui
 
 pygame.init()
 WIDTH  = 1200
