@@ -3,14 +3,19 @@ var HEIGHT = 800;
 var LEVERS = [];
 var TOGGLES = [];
 var KEYS = [];
-
+var dragging = false;
+var current = null;
+var last_key = null;
+var KEY_HOLES = [];
+var function_called = false;
+var key_nature = 'locked';
 
 function setup()
 {
     cnv = createCanvas(WIDTH, HEIGHT);
     cnv.mousePressed(handle_mouse_click);
     cnv.mouseReleased(mouseReleased);
-
+    cnv.doubleClicked(rotatekey);
     for(var i = 0;i <= 4; ++i)
     {
         if(i == 0)
@@ -24,12 +29,13 @@ function setup()
         else if(i == 4)
             LEVERS.push(new leverV6(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right));
         TOGGLES.push(LEVERS[i]);
+        KEY_HOLES.push([LEVERS[i], LEVERS[i].get_pos()])
     }
-    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 60, 10, 30, "A1", key_image));
-    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 110, 10, 30, "C111_V3", key_image));
-    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 160, 10, 30, "C111_V1", key_image));
-    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 210, 10, 30, "AG5", key_image));
-    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 260, 10, 30, "V6", key_image));
+    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 60, 10, 30, "AN", key_image));
+    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 110, 10, 30, "5N", key_image));
+    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 160, 10, 30, "5", key_image));
+    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 210, 10, 30, "5R", key_image));
+    KEYS.push(new Key(WIDTH - 250, HEIGHT / 2 + 260, 10, 30, "6N", key_image));
 
     
 }
@@ -60,6 +66,8 @@ function draw_track()
 
 function handle_mouse_click()
 {
+    function_called = false;
+    dragging = true;
     mx = mouseX;
     my =  mouseY;
     for(var i = 0;i <= 4; ++i)
@@ -74,16 +82,39 @@ function handle_mouse_click()
     {
         if(KEYS[i].over())
         {
-            console.log('inside')
             KEYS[i].pressed();
+            current = KEYS[i];
+            
         }
-        // if(KEYS[i].x <= mx && mx <= KEYS[i].x + 20 && KEYS[i].y <= my && my <= KEYS[i].y + 40)
-        // {
-        //     if
-        //     KEYS[i].pressed();
-        //     console.log(mx, my);
-        //     // KEYS[i].toggle();
-        // }
+    }
+}
+function rotatekey()
+{
+    if(key_nature == 'locked'){
+        last_key.w = 30
+        last_key.h = 10
+        last_key.y = last_key.y + 10
+        last_key.x = last_key.x - 10
+        last_key.show();
+        key_nature = 'unlocked';
+    }
+    else if(key_nature == 'unlocked'){
+        last_key.w = 10
+        last_key.h = 30
+        last_key.y = last_key.y 
+        last_key.x = last_key.x 
+        last_key.show();
+        key_nature = 'locked';
+    }
+}
+
+
+
+function isMouseInside(x, y, w, h, mx, my){
+    if(mx > x && mx < x+w && my > y && my < y + h){
+     return true; 
+    } else {
+     return false; 
     }
 }
 
@@ -104,13 +135,45 @@ function draw_keybox()
 }
 
 
+function check_key(key){
+    mx = mouseX;
+    my =  mouseY;
+    curr_key = key
+    var flag = false;
+    for(var i = 0; i <= 4; i++) {
+        for(var j = 0; j < LEVERS[i].keycodes.length; j++) {
+            checking = LEVERS[i].keycodes[j];
+            if(curr_key.type == checking ) {
+                if(isMouseInside(LEVERS[i].offset[j][0] + LEVERS[i].x - 10, LEVERS[i].offset[j][1] + LEVERS[i].y - 10, 20, 20, mx, my))
+                {
+                    console.log("key found");
+                    curr_key.x = LEVERS[i].offset[j][0] + LEVERS[i].x - 5;
+                    curr_key.y = LEVERS[i].offset[j][1] + LEVERS[i].y - 15;
+                    flag = true;
+                    // doubleClicked(curr_key);
+                    last_key = curr_key;
+                    break;
+                }
+            }
+
+        }
+        if(flag) break;
+    }
+}
+
 function mouseReleased()
 {
     for(var i = 0;i <= 4; ++i)
     {
-        console.log('release')
         KEYS[i].released();
+    
     }
+    dragging = false;
+    if(function_called == false){
+        check_key(current);
+        function_called = true;
+    }
+    current = null;
 }
 
 function draw()
@@ -142,6 +205,11 @@ function draw()
         
     }
     draw_keybox();
+    if(dragging && current){
+        for(lever of LEVERS){
+            lever.show_outline(current.type);
+        }
+    }
     
 
 }

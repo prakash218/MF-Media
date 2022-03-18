@@ -3,8 +3,6 @@ class Key {
   
       this.dragging = false; // Is the object being dragged?
       this.rollover = false; // Is the mouse over the ellipse?
-  
-  
       this.x = x;
       this.y = y;
       // Dimensions
@@ -18,7 +16,6 @@ class Key {
       // Is mouse over object
       if (mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h) {
         this.rollover = true;
-        console.log('here');
         return true;
       } else {
         this.rollover = false;
@@ -43,14 +40,15 @@ class Key {
       // Different fill based on state
       if (this.dragging) {
         fill(230,230,20);
-        rect(this.x, this.y, this.w, this.h);
       } else if (this.rollover) {
         fill(200,200,40);
-        rect(this.x, this.y, this.w, this.h);
+        
       } else {
-        // fill(230,230,20);
-        image(this.img, this.x, this.y);
+        fill(230,230,20);
       }
+	  rect(this.x, this.y, this.w, this.h);
+	  textSize(15);
+	  text(this.type, this.x + this.w + 12, this.y + this.h / 2 + 5);
     }
   
     pressed() {
@@ -72,13 +70,13 @@ class Key {
 class Lever{
     constructor(x, y, left_img, right_img, name){
         this.name = name;
-        console.log("lever created");
         this.x = x;
         this.y = y;
         this.left_img = left_img;
         this.right_img = right_img;
         this.img = this.left_img
         this.dir = 'left';
+		this.offset = {0:[75,100],1:[75,25], 2:[25,25], 3:[25,100]}
     }
     toggle()
     {
@@ -93,6 +91,28 @@ class Lever{
             this.dir = 'left';
         }
     }
+	show_outline(type)
+	{
+		for(var i = 0; i < this.keycodes.length; ++i)
+		{
+			if(type == this.keycodes[i])
+			{
+				stroke(255,0,0);
+				strokeWeight(5);
+				noFill();
+				circle(this.x + this.offset[i][0], this.y + this.offset[i][1], 20)
+			}
+		}
+	}
+	get_pos()
+	{
+		var res = [];
+		for(var i = 0; i < this.keycodes.length; ++i)
+		{
+			res.push([this.x + this.offset[i][0], this.y + this.offset[i][1]]);
+		}
+		return res;
+	}
     draw()
     {
         image(this.img, this.x, this.y, 100, 200);
@@ -140,7 +160,6 @@ class leverA1 extends Lever{
         super(x, y, left_img, right_img, 'A1');
         this.keys = 1
         this.keycodes = ['AN'];
-        console.log("leverA1 created");
     }
     
     
@@ -151,7 +170,6 @@ class leverC111_V3 extends Lever{
         super(x, y, left_img, right_img, 'C111_V3');
         this.keys = 3
         this.keycodes = ['6N', 'AN', '5R'];
-        console.log("leverC111_V3 created");
     }
     
 }
@@ -161,7 +179,6 @@ class leverC111_V1 extends Lever{
         super(x, y, left_img, right_img, 'C111_V1');
         this.keys = 3
         this.keycodes = ['6N', 'AN', '5N'];
-        console.log("leverC111_V1 created");
     }
     
 }
@@ -172,7 +189,6 @@ class leverAG5 extends Lever{
         this.keys = 4
         this.keycodes = ['5R', '5N', '5', '5'];
 
-        console.log("leverC111_V1 created");
     }
     
 }
@@ -183,7 +199,6 @@ class leverV6 extends Lever{
         super(x, y, left_img, right_img, 'V6');
         this.keys = 2
         this.keycodes = ['6N', '5'];
-        console.log("leverA1 created");
     }
     
 }
