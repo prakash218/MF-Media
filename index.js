@@ -90,22 +90,32 @@ function handle_mouse_click()
 }
 function rotatekey()
 {
-    if(key_nature == 'locked'){
-        last_key.w = 30
-        last_key.h = 10
-        last_key.y = last_key.y + 10
-        last_key.x = last_key.x - 10
-        last_key.show();
-        key_nature = 'unlocked';
+    for(var key of KEYS)
+    {
+        if(key.over() && last_key == key)
+        {
+            if(key_nature == 'locked'){
+                last_key.w = 30
+                last_key.h = 10
+                last_key.x -= 10;
+                last_key.y += 5;
+                last_key.show();
+                key_nature = 'unlocked';
+            }
+            else if(key_nature == 'unlocked'){
+                last_key.w = 10
+                last_key.h = 30
+                last_key.x += 10;
+                last_key.y -= 10;
+                // last_key.y = last_key.y 
+                // last_key.x = last_key.x 
+                last_key.show();
+                key_nature = 'locked';
+            }
+        }
     }
-    else if(key_nature == 'unlocked'){
-        last_key.w = 10
-        last_key.h = 30
-        last_key.y = last_key.y 
-        last_key.x = last_key.x 
-        last_key.show();
-        key_nature = 'locked';
-    }
+    check_key(last_key);
+    
 }
 
 
@@ -147,8 +157,15 @@ function check_key(key){
                 if(isMouseInside(LEVERS[i].offset[j][0] + LEVERS[i].x - 10, LEVERS[i].offset[j][1] + LEVERS[i].y - 10, 20, 20, mx, my))
                 {
                     console.log("key found");
-                    curr_key.x = LEVERS[i].offset[j][0] + LEVERS[i].x - 5;
-                    curr_key.y = LEVERS[i].offset[j][1] + LEVERS[i].y - 15;
+                    if(key_nature == "unlocked")
+                    {
+                        curr_key.x = LEVERS[i].offset[j][0] + LEVERS[i].x - 15;
+                        curr_key.y = LEVERS[i].offset[j][1] + LEVERS[i].y - 5;
+                    }
+                    else{
+                        curr_key.x = LEVERS[i].offset[j][0] + LEVERS[i].x - 5;
+                        curr_key.y = LEVERS[i].offset[j][1] + LEVERS[i].y - 15;
+                    }
                     flag = true;
                     // doubleClicked(curr_key);
                     last_key = curr_key;

@@ -10,6 +10,7 @@ class Key {
       this.h = h;
       this.type = type;
       this.img = img
+      this.angle = 0;
     }
   
     over() {
