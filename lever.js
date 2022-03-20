@@ -1,6 +1,6 @@
 class Key {
     constructor(x, y, w, h, type, img) {
-  
+   
       this.dragging = false; // Is the object being dragged?
       this.rollover = false; // Is the mouse over the ellipse?
       this.x = x;
@@ -69,14 +69,16 @@ class Key {
   }
 
 class Lever{
-    constructor(x, y, left_img, right_img, name){
+    constructor(x, y, left_img, right_img, name, key_images){
         this.name = name;
         this.x = x;
         this.y = y;
         this.left_img = left_img;
         this.right_img = right_img;
         this.img = this.left_img
+        this.key_images = key_images;
         this.dir = 'left';
+        console.log(this.key_images);
 		this.offset = {0:[75,100],1:[75,25], 2:[25,25], 3:[25,100]}
     }
     toggle()
@@ -114,14 +116,16 @@ class Lever{
 		}
 		return res;
 	}
-    draw()
+  draw()
     {
         image(this.img, this.x, this.y, 100, 200);
         textSize(15);
         if(this.keys >= 1)
         {
             fill(200);
-            circle(this.x + 75, this.y + 100, 20);
+            console.log(this.key_images);
+            image(this.key_images[this.keycodes[0]], this.x + this.offset[0][0] - 60, this.y + this.offset[0][1] - 60, 100, 100);
+            // circle(this.x + 75, this.y + 100, 20);
             fill(0);
             text(this.keycodes[0], this.x + 75, this.y + 130);
         }
@@ -157,49 +161,42 @@ class Lever{
 }
 
 class leverA1 extends Lever{
-    constructor(x, y, left_img, right_img){
-        super(x, y, left_img, right_img, 'A1');
+    constructor(x, y, left_img, right_img, key_images){
+        super(x, y, left_img, right_img, 'A1', key_images);
         this.keys = 1
         this.keycodes = ['AN'];
     }
-    
-    
 }
 
 class leverC111_V3 extends Lever{
-    constructor(x, y, left_img, right_img){
-        super(x, y, left_img, right_img, 'C111_V3');
+    constructor(x, y, left_img, right_img, key_images){
+        super(x, y, left_img, right_img, 'C111_V3', key_images);
         this.keys = 3
         this.keycodes = ['6N', 'AN', '5R'];
-    }
-    
+    }  
 }
 
 class leverC111_V1 extends Lever{
-    constructor(x, y, left_img, right_img){
-        super(x, y, left_img, right_img, 'C111_V1');
+    constructor(x, y, left_img, right_img, key_images){
+        super(x, y, left_img, right_img, 'C111_V1', key_images);
         this.keys = 3
         this.keycodes = ['6N', 'AN', '5N'];
     }
-    
 }
 
 class leverAG5 extends Lever{
-    constructor(x, y, left_img, right_img){
-        super(x, y, left_img, right_img, 'AG5');
+    constructor(x, y, left_img, right_img, key_images){
+        super(x, y, left_img, right_img, 'AG5', key_images);
         this.keys = 4
         this.keycodes = ['5R', '5N', '5', '5'];
-
     }
-    
 }
 
 
 class leverV6 extends Lever{
-    constructor(x, y, left_img, right_img){
-        super(x, y, left_img, right_img, 'V6');
+    constructor(x, y, left_img, right_img, key_images){
+        super(x, y, left_img, right_img, 'V6', key_images);
         this.keys = 2
         this.keycodes = ['6N', '5'];
     }
-    
 }

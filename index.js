@@ -9,6 +9,7 @@ var last_key = null;
 var KEY_HOLES = [];
 var function_called = false;
 var key_nature = 'locked';
+var key_images = {};
 
 function setup()
 {
@@ -19,15 +20,15 @@ function setup()
     for(var i = 0;i <= 4; ++i)
     {
         if(i == 0)
-            LEVERS.push(new leverA1(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right));
+            LEVERS.push(new leverA1(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right, key_images));
         else if(i == 1)
-            LEVERS.push(new leverC111_V3(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right));
+            LEVERS.push(new leverC111_V3(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right, key_images));
         else if(i == 2)
-            LEVERS.push(new leverC111_V1(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right));
+            LEVERS.push(new leverC111_V1(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right, key_images));
         else if(i == 3)
-            LEVERS.push(new leverAG5(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right));
+            LEVERS.push(new leverAG5(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right, key_images));
         else if(i == 4)
-            LEVERS.push(new leverV6(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right));
+            LEVERS.push(new leverV6(i * 220 + 110, (HEIGHT * (3/4)) - 50, lever_left, lever_right, key_images));
         TOGGLES.push(LEVERS[i]);
         KEY_HOLES.push([LEVERS[i], LEVERS[i].get_pos()])
     }
@@ -44,10 +45,24 @@ function setup()
 function preload()
 {
     //load lever image
-    lever_left = loadImage("images/lever_left.png");
-    lever_right = loadImage("images/lever_right.png");
-    key_image  = loadImage("images/key.png");
-    emergencybtn = loadImage("images/emergencybtn.png");
+    lever_left          = loadImage("images/lever_left.png");
+    lever_right         = loadImage("images/lever_right.png");
+    key_image           = loadImage("images/key.png");
+    emergencybtn        = loadImage("images/emergencybtn.png");
+    key_5               = loadImage("images/5 key.png");
+    key_5N              = loadImage("images/5N key.png");
+    key_5R              = loadImage("images/5R key.png");
+    key_6R              = loadImage("images/6R key.png");
+    key_6N              = loadImage("images/6N key.png");
+    key_AN              = loadImage("images/AN key.png");
+    key_images["5"]     = key_5;
+    key_images["5N"]    = key_5N;
+    key_images["5R"]    = key_5R;
+    key_images["6R"]    = key_6R;
+    key_images["6N"]    = key_6N;
+    key_images["AN"]    = key_AN;
+
+
 }
 
 function draw_track()
